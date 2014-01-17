@@ -22,7 +22,9 @@ static class SideEffectTask implements Action0
      counter.incrementAndGet();
    }
 }
-RxCronScheduler service = new RxCronForwardingScheduler(Schedulers.executor(Executors.newSingleThreadScheduledExecutor()));
+ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+Scheduler inner = Schedulers.executor(executor);
+RxCronScheduler service = new RxCronForwardingScheduler(inner);
 final SideEffectTask task = new SideEffectTask();
 WeeklyCalendar weeklyCalendar = new WeeklyCalendar();
 weeklyCalendar.setDaysExcluded(new boolean [] {false, false, true, true,true,true,true, true});
