@@ -10,7 +10,7 @@ example) at will.
 Build status
 ------------
 
-[![Build Status](https://svarcheg.ci.cloudbees.com/job/rx-cron-scheduler/badge/icon)](https://svarcheg.ci.cloudbees.com/job/rx-cron-scheduler/badge/icon)
+[![Build Status](https://svarcheg.ci.cloudbees.com/buildStatus/icon?job=rx-cron-scheduler)](https://svarcheg.ci.cloudbees.com/me/my-views/view/All/job/rx-cron-scheduler/)
 
 
 Installation
