@@ -2,7 +2,7 @@ rx-cron-scheduler
 =================
 
 Main idea here is to add Quartz (http://quartz-scheduler.org/)
-calendars and Crons to rx-java (https://github.com/Netflix/RxJava)
+calendars and crons to rx-java (https://github.com/Netflix/RxJava)
 schedulers. It is a "forwarding" scheduler implementation, so one can
 change the "inner" scheduler (to replace it by a TestScheduler for
 example) at will.
@@ -13,7 +13,7 @@ For now please grab the jar from cloudbees CI server.
 
 Usage
 ------------
-```
+```java
 static class SideEffectTask implements Action0
 {
    private AtomicLong counter = new AtomicLong();
