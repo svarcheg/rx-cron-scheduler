@@ -1,0 +1,13 @@
+apply plugin: 'base'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+group = "com.ullink.ultools"
+version = "1.1";
+
+dependencies {
+  compile 'com.netflix.rxjava:rxjava-core:0.16.1'
+  testCompile 'junit:junit:4.11'
+}
