@@ -16,10 +16,9 @@ Usage
 ```java
 static class SideEffectTask implements Action0
 {
-   private AtomicLong counter = new AtomicLong();
    @Override
    public void call() {
-     counter.incrementAndGet();
+      .. some stuff ...
    }
 }
 ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
@@ -27,7 +26,8 @@ Scheduler inner = Schedulers.executor(executor);
 RxCronScheduler service = new RxCronForwardingScheduler(inner);
 final SideEffectTask task = new SideEffectTask();
 WeeklyCalendar weeklyCalendar = new WeeklyCalendar();
-weeklyCalendar.setDaysExcluded(new boolean [] {false, false, true, true,true,true,true, true});
+boolean [] excluded = new boolean [] {false, false, true, true,true,true,true, true};
+weeklyCalendar.setDaysExcluded(excluded);
 service.schedule(task, new CronExpression("0 0 15 ? * *"), weeklyCalendar );
 ```
 
