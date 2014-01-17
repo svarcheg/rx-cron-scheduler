@@ -7,6 +7,12 @@ schedulers. It is a "forwarding" scheduler implementation, so one can
 change the "inner" scheduler (to replace it by a TestScheduler for
 example) at will.
 
+Build status
+------------
+
+[![Build Status](https://svarcheg.ci.cloudbees.com/job/rx-cron-scheduler/badge/icon)](https://svarcheg.ci.cloudbees.com/job/rx-cron-scheduler/badge/icon)
+
+
 Installation
 ------------
 For now please grab the jar from cloudbees CI server.
@@ -31,8 +37,4 @@ weeklyCalendar.setDaysExcluded(excluded);
 service.schedule(task, new CronExpression("0 0 15 ? * *"), weeklyCalendar );
 ```
 
-Build status
-------------
-
-[![Build Status](https://svarcheg.ci.cloudbees.com/job/rx-cron-scheduler/badge/icon)](https://svarcheg.ci.cloudbees.com/job/rx-cron-scheduler/badge/icon)
 
