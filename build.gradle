@@ -11,3 +11,7 @@ dependencies {
   compile 'com.netflix.rxjava:rxjava-core:0.15.1'
   testCompile 'junit:junit:4.11'
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.10'
+}
