@@ -15,7 +15,20 @@ Build status
 
 Installation
 ------------
-For now please grab the jar from cloudbees CI server.
+Available at clojars
+(https://clojars.org/com.ullink.rx/rx-cron-scheduler).
+
+1/ Add a clojars repo. If you use gradle following should be enough:
+```groovy
+repositories {
+    mavenRepo url: 'http://clojars.org/repo'
+}
+```
+
+2/ Add a dependency to your project. Using gradle:
+```groovy
+compile 'com.ullink.rx:rx-cron-scheduler:1.1'
+```
 
 Usage
 ------------
@@ -36,5 +49,3 @@ boolean [] excluded = new boolean [] {false, false, true, true,true,true,true, t
 weeklyCalendar.setDaysExcluded(excluded);
 service.schedule(task, new CronExpression("0 0 15 ? * *"), weeklyCalendar );
 ```
-
-
