@@ -1,8 +1,19 @@
+buildscript {
+    repositories {
+        maven { url 'http://clojars.org/repo' }
+    }
+    dependencies {
+        classpath 'clojuresque:clojars:1.4.0'
+    }
+}
+
 apply plugin: 'base'
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+apply plugin: 'clojuresque-clojars'
+
 
 group = "com.ullink.rx"
 version = "1.1";
@@ -15,3 +26,21 @@ dependencies {
   compile 'com.netflix.rxjava:rxjava-core:0.16.1'
   testCompile 'junit:junit:4.11'
 }
+
+
+clojars {
+    repo(repositories)
+    deploy([:], uploadArchives) {
+        project {
+            licenses {
+                license {
+                    name 'Apache-2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.html'
+                    distribution 'repo'
+                }
+            }
+        }
+    }
+}
+
+
