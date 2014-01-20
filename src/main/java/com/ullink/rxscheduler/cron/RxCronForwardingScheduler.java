@@ -13,125 +13,151 @@ import com.ullink.rxscheduler.cron.calendar.Calendar;
 import com.ullink.rxscheduler.cron.calendar.CronExpression;
 
 /**
- * 
- * Using forwarding here because would like to be able to reuse {@link TestScheduler} features.   
- *
+ * Using forwarding here because would like to be able to reuse {@link TestScheduler} features.
  */
-public class RxCronForwardingScheduler extends Scheduler implements RxCronScheduler {
+public class RxCronForwardingScheduler extends Scheduler implements RxCronScheduler
+{
 
     private final Scheduler underlying;
 
-    public RxCronForwardingScheduler(Scheduler underlying) {
+    public RxCronForwardingScheduler(Scheduler underlying)
+    {
         this.underlying = underlying;
     }
 
     @Override
-    public Subscription schedule(Action0 action) {
+    public Subscription schedule(Action0 action)
+    {
         return underlying.schedule(action);
     }
 
     @Override
-    public <T> Subscription schedule(T state, Func2<? super Scheduler, ? super T, ? extends Subscription> action) {
+    public <T> Subscription schedule(T state, Func2<? super Scheduler, ? super T, ? extends Subscription> action)
+    {
         return underlying.schedule(state, action);
     }
 
     @Override
-    public Subscription schedule(Action0 action, long dueTime, TimeUnit unit) {
+    public Subscription schedule(Action0 action, long dueTime, TimeUnit unit)
+    {
         return underlying.schedule(action, dueTime, unit);
     }
 
     @Override
-    public <T> Subscription schedule(T state, Func2<? super Scheduler, ? super T, ? extends Subscription> action, long dueTime, TimeUnit unit) {
+    public <T> Subscription schedule(T state, Func2<? super Scheduler, ? super T, ? extends Subscription> action, long dueTime, TimeUnit unit)
+    {
         return underlying.schedule(state, action, dueTime, unit);
     }
 
     @Override
-    public Subscription schedulePeriodically(Action0 action, long initialDelay, long period, TimeUnit unit) {
+    public Subscription schedulePeriodically(Action0 action, long initialDelay, long period, TimeUnit unit)
+    {
         return underlying.schedulePeriodically(action, initialDelay, period, unit);
     }
 
     @Override
-    public <T> Subscription schedulePeriodically(T state, Func2<? super Scheduler, ? super T, ? extends Subscription> action, long initialDelay, long period, TimeUnit unit) {
+    public <T> Subscription schedulePeriodically(T state, Func2<? super Scheduler, ? super T, ? extends Subscription> action, long initialDelay, long period, TimeUnit unit)
+    {
         return underlying.schedulePeriodically(state, action, initialDelay, period, unit);
     }
 
     @Override
-    public long now() {
+    public long now()
+    {
         return underlying.now();
     }
-	
-	private Date findNextExecutionTime(Date guess, CronExpression cronExpression, Calendar calendar) {
-		Date fireTime = cronExpression.getNextValidTimeAfter(guess);
-		while (fireTime != null && calendar != null && !calendar.isTimeIncluded(fireTime.getTime())){
-			fireTime = findNextExecutionTime(fireTime, cronExpression, calendar);
 
-		} 
-		return fireTime;
-	}
+    private Date findNextExecutionTime(Date guess, CronExpression cronExpression, Calendar calendar)
+    {
+        Date fireTime = cronExpression.getNextValidTimeAfter(guess);
+        while (fireTime != null && calendar != null && !calendar.isTimeIncluded(fireTime.getTime()))
+        {
+            fireTime = findNextExecutionTime(fireTime, cronExpression, calendar);
 
-	@Override
-	public Subscription schedule(Action0 action, CronExpression cronExpression) {
-		return schedule(action, cronExpression, null);
-	}
+        }
+        return fireTime;
+    }
 
-	@Override
-	public Subscription schedule(final Action0 action, final CronExpression cronExpression, final Calendar calendar) {
-		return schedule(null, new Func2<Scheduler, Void, Subscription>() {
+    @Override
+    public Subscription schedule(Action0 action, CronExpression cronExpression)
+    {
+        return schedule(action, cronExpression, null);
+    }
 
-			@Override
-			public Subscription call(Scheduler scheduler, Void state) {
-				action.call();
-				return Subscriptions.empty();
-			}
-		}, cronExpression, calendar);
-	}
+    @Override
+    public Subscription schedule(final Action0 action, final CronExpression cronExpression, final Calendar calendar)
+    {
+        return schedule(null, new Func2<Scheduler, Void, Subscription>()
+        {
 
-	@Override
-	public <T> Subscription schedule(T state,  final Func2<? super Scheduler, ? super T, ? extends Subscription> action, final CronExpression cronExpression) {
-		return schedule(state, action, cronExpression, null);
-	}
+            @Override
+            public Subscription call(Scheduler scheduler, Void state)
+            {
+                action.call();
+                return Subscriptions.empty();
+            }
+        }, cronExpression, calendar);
+    }
 
-	@Override
-	public <T> Subscription schedule(T state,  final Func2<? super Scheduler, ? super T, ? extends Subscription> action, final CronExpression cronExpression,  final Calendar calendar) {
-		final AtomicBoolean complete = new AtomicBoolean();
-		final Func2<Scheduler, T, Subscription> recursiveAction = new Func2<Scheduler, T, Subscription>() {
-			@Override
-			public Subscription call(Scheduler scheduler, T state0) {
-				if (!complete.get()) {
-					final Subscription sub1 = action.call(scheduler, state0);
-					Date fireTime = findNextExecutionTime(new Date(scheduler.now()), cronExpression, calendar);
-					final Subscription sub2;
-					if (fireTime == null) {
-						sub2 = Subscriptions.empty();
-					}
-					else {
-						sub2 =  scheduler.schedule(state0, this, fireTime);	
-					}
-					return Subscriptions.create(new Action0() {
-						@Override
-						public void call() {
-							sub1.unsubscribe();
-							sub2.unsubscribe();
-						}
-					});
-				}
-				return Subscriptions.empty();
-			}
-		};
-		final Subscription sub;
-		Date initialfireTime = findNextExecutionTime(new Date(now()), cronExpression, calendar);
-		if (initialfireTime == null) {
-			sub = Subscriptions.empty();
-		}
-		else {
-			sub = schedule(state, recursiveAction, initialfireTime);
-		}
-		return Subscriptions.create(new Action0() {
-			@Override
-			public void call() {
-				complete.set(true);
-				sub.unsubscribe();
-			}
-		});
-	}
+    @Override
+    public <T> Subscription schedule(T state, final Func2<? super Scheduler, ? super T, ? extends Subscription> action, final CronExpression cronExpression)
+    {
+        return schedule(state, action, cronExpression, null);
+    }
+
+    @Override
+    public <T> Subscription schedule(T state, final Func2<? super Scheduler, ? super T, ? extends Subscription> action, final CronExpression cronExpression, final Calendar calendar)
+    {
+        final AtomicBoolean complete = new AtomicBoolean();
+        final Func2<Scheduler, T, Subscription> recursiveAction = new Func2<Scheduler, T, Subscription>()
+        {
+            @Override
+            public Subscription call(Scheduler scheduler, T state0)
+            {
+                if (!complete.get())
+                {
+                    final Subscription sub1 = action.call(scheduler, state0);
+                    Date fireTime = findNextExecutionTime(new Date(scheduler.now()), cronExpression, calendar);
+                    final Subscription sub2;
+                    if (fireTime == null)
+                    {
+                        sub2 = Subscriptions.empty();
+                    }
+                    else
+                    {
+                        sub2 = scheduler.schedule(state0, this, fireTime);
+                    }
+                    return Subscriptions.create(new Action0()
+                    {
+                        @Override
+                        public void call()
+                        {
+                            sub1.unsubscribe();
+                            sub2.unsubscribe();
+                        }
+                    });
+                }
+                return Subscriptions.empty();
+            }
+        };
+        final Subscription sub;
+        Date initialfireTime = findNextExecutionTime(new Date(now()), cronExpression, calendar);
+        if (initialfireTime == null)
+        {
+            sub = Subscriptions.empty();
+        }
+        else
+        {
+            sub = schedule(state, recursiveAction, initialfireTime);
+        }
+        return Subscriptions.create(new Action0()
+        {
+            @Override
+            public void call()
+            {
+                complete.set(true);
+                sub.unsubscribe();
+            }
+        });
+    }
 }

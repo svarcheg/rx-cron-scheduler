@@ -2,9 +2,11 @@ package com.ullink.rxscheduler.cron.calendar;
 
 import junit.framework.TestCase;
 
-public class BaseCalendarTest extends TestCase {
+public class BaseCalendarTest extends TestCase
+{
 
-    public void testClone() {
+    public void testClone()
+    {
         BaseCalendar base = new BaseCalendar();
         BaseCalendar clone = (BaseCalendar) base.clone();
 
@@ -12,6 +14,5 @@ public class BaseCalendarTest extends TestCase {
         assertEquals(base.getBaseCalendar(), clone.getBaseCalendar());
         assertEquals(base.getTimeZone(), clone.getTimeZone());
     }
-
 
 }

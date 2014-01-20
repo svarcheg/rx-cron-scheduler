@@ -7,23 +7,18 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 /**
- * This implementation of the Calendar excludes (or includes - see below) a 
- * specified time range each day. For example, you could use this calendar to 
- * exclude business hours (8AM - 5PM) every day. Each <CODE>DailyCalendar</CODE>
- * only allows a single time range to be specified, and that time range may not
+ * This implementation of the Calendar excludes (or includes - see below) a
+ * specified time range each day. For example, you could use this calendar to
+ * exclude business hours (8AM - 5PM) every day. Each <CODE>DailyCalendar</CODE> only allows a single time range to be specified, and that time range may not
  * cross daily boundaries (i.e. you cannot specify a time range from 8PM - 5AM).
- * If the property <CODE>invertTimeRange</CODE> is <CODE>false</CODE> (default), 
+ * If the property <CODE>invertTimeRange</CODE> is <CODE>false</CODE> (default),
  * the time range defines a range of times in which triggers are not allowed to
  * fire. If <CODE>invertTimeRange</CODE> is <CODE>true</CODE>, the time range
  * is inverted &ndash; that is, all times <I>outside</I> the defined time range
  * are excluded.
  * <P>
- * Note when using <CODE>DailyCalendar</CODE>, it behaves on the same principals
- * as, for example, {@link com.ullink.rxscheduler.cron.calendar.WeeklyCalendar 
- * WeeklyCalendar}. <CODE>WeeklyCalendar</CODE> defines a set of days that are
- * excluded <I>every week</I>. Likewise, <CODE>DailyCalendar</CODE> defines a 
- * set of times that are excluded <I>every day</I>.
- * 
+ * Note when using <CODE>DailyCalendar</CODE>, it behaves on the same principals as, for example, {@link com.ullink.rxscheduler.cron.calendar.WeeklyCalendar
+ * WeeklyCalendar}. <CODE>WeeklyCalendar</CODE> defines a set of days that are excluded <I>every week</I>. Likewise, <CODE>DailyCalendar</CODE> defines a set of times that are excluded <I>every day</I>.
  * @author Mike Funk, Aaron Craven
  */
 public class DailyCalendar extends BaseCalendar {
