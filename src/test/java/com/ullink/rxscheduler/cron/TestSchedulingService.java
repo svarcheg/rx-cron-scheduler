@@ -1,25 +1,13 @@
 package com.ullink.rxscheduler.cron;
 
-import static org.junit.Assert.assertEquals;
-import java.text.ParseException;
 import java.util.GregorianCalendar;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.Ignore;
-import rx.Observable;
-import rx.Observer;
-import rx.Scheduler;
-import rx.concurrency.Schedulers;
-import rx.concurrency.TestScheduler;
-import rx.operators.SafeObservableSubscription;
+import org.junit.Test;
+import rx.schedulers.TestScheduler;
 import rx.util.functions.Action0;
-import rx.util.functions.Func1;
-import com.ullink.rxscheduler.cron.RxCronForwardingScheduler;
-import com.ullink.rxscheduler.cron.RxCronScheduler;
 import com.ullink.rxscheduler.cron.calendar.CronExpression;
 import com.ullink.rxscheduler.cron.calendar.WeeklyCalendar;
 
@@ -33,7 +21,6 @@ public class TestSchedulingService {
                         counter.incrementAndGet();
                 }
         }
-
 
         @Test
         public void testOnce() throws Exception {

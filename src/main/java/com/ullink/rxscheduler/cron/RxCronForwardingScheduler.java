@@ -3,14 +3,12 @@ package com.ullink.rxscheduler.cron;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import rx.Scheduler;
 import rx.Subscription;
-import rx.concurrency.TestScheduler;
+import rx.schedulers.TestScheduler;
 import rx.subscriptions.Subscriptions;
 import rx.util.functions.Action0;
 import rx.util.functions.Func2;
-
 import com.ullink.rxscheduler.cron.calendar.Calendar;
 import com.ullink.rxscheduler.cron.calendar.CronExpression;
 
