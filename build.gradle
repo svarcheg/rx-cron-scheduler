@@ -16,7 +16,7 @@ apply plugin: 'clojuresque-clojars'
 
 
 group = "com.ullink.rx"
-version = "1.1";
+version = "1.2";
 
 repositories {
     mavenCentral()
@@ -27,6 +27,9 @@ dependencies {
   testCompile 'junit:junit:4.11'
 }
 
+compileJava {
+  targetCompatibility = 1.6
+}
 
 clojars {
     repo(repositories)
