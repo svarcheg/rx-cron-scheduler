@@ -13,6 +13,11 @@ Build status
 [![Build Status](https://svarcheg.ci.cloudbees.com/buildStatus/icon?job=rx-cron-scheduler)](https://svarcheg.ci.cloudbees.com/me/my-views/view/All/job/rx-cron-scheduler/)
 
 
+Dependency status
+------------
+
+[![Dependency Status](https://www.versioneye.com/user/projects/52e26562ec137520dc00003f/badge.png)](https://www.versioneye.com/user/projects/52e26562ec137520dc00003f)
+
 Installation
 ------------
 Available at clojars
