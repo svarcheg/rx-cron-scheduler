@@ -194,6 +194,22 @@ public class BaseCalendar implements Calendar, Cloneable
         return timeStamp;
     }
 
+    @Override
+    public long getPreviousIncludedTime(long timeStamp)
+    {
+        if (timeStamp <= 0)
+        {
+            throw new IllegalArgumentException("timeStamp must be greater 0");
+        }
+
+        if (baseCalendar != null)
+        {
+            return baseCalendar.getPreviousIncludedTime(timeStamp);
+        }
+
+        return timeStamp;
+    }
+
     /**
      * Build a <code>{@link java.util.Calendar}</code> for the given timeStamp.
      * The new Calendar will use the <code>BaseCalendar</code> time zone if it

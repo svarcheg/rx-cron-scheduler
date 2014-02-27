@@ -73,6 +73,13 @@ public interface Calendar extends java.lang.Cloneable
      * </p>
      */
     long getNextIncludedTime(long timeStamp);
+    
+    /**
+     * <p>
+     * Determine the next time (in milliseconds) that is 'included' by the Calendar after the given time.
+     * </p>
+     */
+    long getPreviousIncludedTime(long timeStamp);
 
     /**
      * <p>

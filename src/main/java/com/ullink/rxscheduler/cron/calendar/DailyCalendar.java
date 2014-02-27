@@ -546,6 +546,38 @@ public class DailyCalendar extends BaseCalendar {
         
         return nextIncludedTime;
     }
+    
+    @Override
+    public long getPreviousIncludedTime(long timeInMillis) {
+        long previousIncludedTime = timeInMillis + oneMillis;
+
+        while (!isTimeIncluded(previousIncludedTime)) {
+            if (!invertTimeRange) {
+                if ((previousIncludedTime >= getTimeRangeStartingTimeInMillis(previousIncludedTime)) &&
+                 (previousIncludedTime <= getTimeRangeEndingTimeInMillis(previousIncludedTime))) {
+                    previousIncludedTime = getTimeRangeStartingTimeInMillis(previousIncludedTime) - oneMillis;
+                } else if ((getBaseCalendar() != null) && (!getBaseCalendar().isTimeIncluded(previousIncludedTime))) {
+                    previousIncludedTime = getBaseCalendar().getPreviousIncludedTime(previousIncludedTime);
+                } else {
+                    previousIncludedTime--;
+                }
+            } else {
+                if (previousIncludedTime > getTimeRangeEndingTimeInMillis(previousIncludedTime)) {
+                    previousIncludedTime = getTimeRangeEndingTimeInMillis(previousIncludedTime);
+                } else if (previousIncludedTime < getTimeRangeStartingTimeInMillis(previousIncludedTime)) {
+                    //(move to end of previous day)
+                    previousIncludedTime = getStartOfDayJavaCalendar(previousIncludedTime).getTime().getTime();
+                    previousIncludedTime -= 1l;
+                } else if ((getBaseCalendar() != null) && (!getBaseCalendar().isTimeIncluded(previousIncludedTime))){
+                    previousIncludedTime = getBaseCalendar().getPreviousIncludedTime(previousIncludedTime);
+                } else {
+                    previousIncludedTime--;
+                }
+            }
+        }
+
+        return previousIncludedTime;
+    }
 
     /**
      * Returns the start time of the time range (in milliseconds) of the day 
