@@ -204,13 +204,13 @@ public class WeeklyCalendar extends BaseCalendar implements Calendar
 
         // Call base calendar implementation first
         long baseTime = super.getPreviousIncludedTime(timeStamp);
-        if ((baseTime > 0) && (baseTime < timeStamp))
+        if ((baseTime > 0) && (baseTime > timeStamp))
         {
             timeStamp = baseTime;
         }
 
         // Get timestamp for 00:00:00
-        java.util.Calendar cl = getStartOfDayJavaCalendar(timeStamp);
+        java.util.Calendar cl = getEndOfDayJavaCalendar(timeStamp);
         int wday = cl.get(java.util.Calendar.DAY_OF_WEEK);
 
         if (!isDayExcluded(wday))

@@ -118,13 +118,13 @@ public class HolidayCalendar extends BaseCalendar implements Calendar
     {
         // Call base calendar implementation first
         long baseTime = super.getPreviousIncludedTime(timeStamp);
-        if ((baseTime > 0) && (baseTime < timeStamp))
+        if ((baseTime > 0) && (baseTime > timeStamp))
         {
             timeStamp = baseTime;
         }
 
         // Get timestamp for 00:00:00
-        java.util.Calendar day = getStartOfDayJavaCalendar(timeStamp);
+        java.util.Calendar day = getEndOfDayJavaCalendar(timeStamp);
         while (isTimeIncluded(day.getTime().getTime()) == false)
         {
             day.add(java.util.Calendar.DATE, -1);

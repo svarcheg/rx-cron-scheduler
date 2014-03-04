@@ -228,13 +228,13 @@ public class MonthlyCalendar extends BaseCalendar implements Calendar
 
         // Call base calendar implementation first
         long baseTime = super.getPreviousIncludedTime(timeStamp);
-        if ((baseTime > 0) && (baseTime < timeStamp))
+        if ((baseTime > 0) && (baseTime > timeStamp))
         {
             timeStamp = baseTime;
         }
 
         // Get timestamp for 00:00:00
-        java.util.Calendar cl = getStartOfDayJavaCalendar(timeStamp);
+        java.util.Calendar cl = getEndOfDayJavaCalendar(timeStamp);
         int day = cl.get(java.util.Calendar.DAY_OF_MONTH);
 
         if (!isDayExcluded(day))
