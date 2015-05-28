@@ -16,7 +16,7 @@ apply plugin: 'clojuresque-clojars'
 
 
 group = "com.ullink.rx"
-version = "1.4";
+version = "1.5";
 
 repositories {
     mavenCentral()
