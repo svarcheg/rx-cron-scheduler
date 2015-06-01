@@ -32,7 +32,7 @@ repositories {
 
 2/ Add a dependency to your project. Using gradle:
 ```groovy
-compile 'com.ullink.rx:rx-cron-scheduler:1.4'
+compile 'com.ullink.rx:rx-cron-scheduler:1.5'
 ```
 
 Usage
