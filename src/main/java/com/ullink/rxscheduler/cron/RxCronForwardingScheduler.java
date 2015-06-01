@@ -105,43 +105,69 @@ public class RxCronForwardingScheduler extends Scheduler implements RxCronSchedu
         return schedule(state, action, cronExpression, null);
     }
 
+    final class RecursiveAction<T>  implements  Func2<Scheduler, T, Subscription>
+    {
+        private final AtomicBoolean                                               complete;
+        private final Func2<? super Scheduler, ? super T, ? extends Subscription> action;
+        private final CronExpression                                              cronExpression;
+        private final Calendar                                                    calendar;
+        private final Date dueTime;
+
+        RecursiveAction(AtomicBoolean complete, Func2<? super Scheduler, ? super T, ? extends Subscription> action, CronExpression cronExpression, Calendar calendar, Date dueTime)
+        {
+            this.complete = complete;
+            this.action = action;
+            this.cronExpression = cronExpression;
+            this.calendar = calendar;
+            this.dueTime = dueTime;
+        }
+
+        @Override
+        public Subscription call(Scheduler scheduler, T state0)
+        {
+            if (!complete.get())
+            {
+                final Subscription sub1;
+                if (scheduler.now() < dueTime.getTime())
+                {
+                    sub1 = Subscriptions.empty();
+                }
+                else
+                {
+                    sub1 = action.call(scheduler, state0);
+                }
+                Date fireTime = findNextExecutionTime(new Date(scheduler.now()), cronExpression, calendar);
+                final Subscription sub2;
+                if (fireTime == null)
+                {
+                    sub2 = Subscriptions.empty();
+                }
+                else
+                {
+                    sub2 = scheduler.schedule(state0, new RecursiveAction<T>(complete, action, cronExpression, calendar, fireTime), fireTime);
+                }
+                return Subscriptions.create(new Action0()
+                {
+                    @Override
+                    public void call()
+                    {
+                        sub1.unsubscribe();
+                        sub2.unsubscribe();
+                    }
+                });
+            }
+            return Subscriptions.empty();
+        }
+    }
+
+
     @Override
     public <T> Subscription schedule(T state, final Func2<? super Scheduler, ? super T, ? extends Subscription> action, final CronExpression cronExpression, final Calendar calendar)
     {
         final AtomicBoolean complete = new AtomicBoolean();
-        final Func2<Scheduler, T, Subscription> recursiveAction = new Func2<Scheduler, T, Subscription>()
-        {
-            @Override
-            public Subscription call(Scheduler scheduler, T state0)
-            {
-                if (!complete.get())
-                {
-                    final Subscription sub1 = action.call(scheduler, state0);
-                    Date fireTime = findNextExecutionTime(new Date(scheduler.now()), cronExpression, calendar);
-                    final Subscription sub2;
-                    if (fireTime == null)
-                    {
-                        sub2 = Subscriptions.empty();
-                    }
-                    else
-                    {
-                        sub2 = scheduler.schedule(state0, this, fireTime);
-                    }
-                    return Subscriptions.create(new Action0()
-                    {
-                        @Override
-                        public void call()
-                        {
-                            sub1.unsubscribe();
-                            sub2.unsubscribe();
-                        }
-                    });
-                }
-                return Subscriptions.empty();
-            }
-        };
-        final Subscription sub;
         Date initialfireTime = findNextExecutionTime(new Date(now()), cronExpression, calendar);
+        RecursiveAction<T> recursiveAction = new RecursiveAction<T>(complete, action, cronExpression, calendar, initialfireTime);
+        final Subscription sub;
         if (initialfireTime == null)
         {
             sub = Subscriptions.empty();
